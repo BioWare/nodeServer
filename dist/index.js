@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const port = 3000;
+const jsonMiddleWare = express_1.default.json();
+app.use(jsonMiddleWare);
 const db = {
     courses: [
         { id: 1, title: 'front-end' },
@@ -31,11 +33,23 @@ app.get('/courses', (req, res) => {
     res.json(foundCourses);
 });
 app.get('/courses/:id', (req, res) => {
-    const foundCours = db.courses.find(c => c.id === +req.params.id);
+    const foundCours = db.courses.find(course => course.id === +req.params.id);
     if (!foundCours) {
         res.sendStatus(404);
     }
     res.json(foundCours);
+});
+app.post('/courses', (req, res) => {
+    if (!req.body.title || req.body.title === ' ') {
+        res.sendStatus(400);
+        return;
+    }
+    const addedCourse = {
+        id: +(new Date()),
+        title: req.body.title
+    };
+    db.courses.push(addedCourse);
+    res.json('course ' + addedCourse + ' added');
 });
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

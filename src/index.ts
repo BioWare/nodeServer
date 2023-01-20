@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express'
 
 const app = express()
 const port = 3000
+const jsonMiddleWare = express.json()
+app.use(jsonMiddleWare)
 
 type CourseType = {
   id: number
@@ -40,13 +42,31 @@ app.get('/courses', (req: Request, res: Response) => {
 })
 
 app.get('/courses/:id', (req: Request, res: Response) => {
-  const foundCours = db.courses.find(c => c.id === +req.params.id)
+  const foundCours = db.courses.find(course => course.id === +req.params.id)
   if(!foundCours) {
     res.sendStatus(404)
   }
   
   res.json(foundCours)
 })
+
+
+app.post('/courses', (req: Request, res: Response) => {
+  if(!req.body.title || req.body.title === ' ') {
+    res.sendStatus(400)
+    return
+  }
+
+  const addedCourse = {
+    id: +(new Date()),
+    title: req.body.title
+  }
+  db.courses.push(addedCourse)
+  
+  res.json('course ' + addedCourse + ' added')
+})
+
+
 
 
 app.listen(port, () => {
