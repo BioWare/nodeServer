@@ -63,7 +63,7 @@ app.post('/courses', (req: Request, res: Response) => {
   }
   db.courses.push(addedCourse)
   
-  res.json('course ' + addedCourse + ' added')
+  res.status(201).json('course ' + addedCourse.title + ' added')
 })
 
 
