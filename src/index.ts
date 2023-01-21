@@ -14,6 +14,15 @@ type dateBase = {
   courses: Array<CourseType>
 }
 
+const HTTP_STATUSES = {
+  OK_200: 200,
+  CREATED_201: 201,
+  NO_CONTENT_204: 204,
+
+  BAD_REQUEST_400: 400,
+  NOT_FOUND_404: 404
+}
+
 const db: dateBase = {
   courses: [
     {id:1, title: 'front-end'},
@@ -44,7 +53,7 @@ app.get('/courses', (req: Request, res: Response) => {
 app.get('/courses/:id', (req: Request, res: Response) => {
   const foundCours = db.courses.find(course => course.id === +req.params.id)
   if(!foundCours) {
-    res.sendStatus(404)
+    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
   }
   
   res.json(foundCours)
@@ -53,7 +62,7 @@ app.get('/courses/:id', (req: Request, res: Response) => {
 
 app.post('/courses', (req: Request, res: Response) => {
   if(!req.body.title || req.body.title === ' ') {
-    res.sendStatus(400)
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
     return
   }
 
@@ -63,16 +72,34 @@ app.post('/courses', (req: Request, res: Response) => {
   }
   db.courses.push(addedCourse)
   
-  res.status(201).json('course ' + addedCourse.title + ' added')
+  res.status(HTTP_STATUSES.CREATED_201).json('course ' + addedCourse.title + ' added')
 })
 
 app.delete('/courses/:id', (req: Request, res: Response) => {
   const reqID = +req.params.id
   db.courses = db.courses.filter(c => c.id !== reqID)
 
-  res.sendStatus(204)
+  res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
+
+app.put('/courses/:id', (req: Request, res: Response) => {
+
+  if(!req.body.title) {
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+    return;
+  }
+
+  const foundCours = db.courses.find(course => course.id === +req.params.id)
+
+  if(!foundCours) {
+    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+    return;
+  }
+  foundCours.title = req.body.title
+  
+  res.json(foundCours)
+})
 
 
 app.listen(port, () => {
