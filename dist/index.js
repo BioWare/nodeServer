@@ -51,6 +51,11 @@ app.post('/courses', (req, res) => {
     db.courses.push(addedCourse);
     res.status(201).json('course ' + addedCourse.title + ' added');
 });
+app.delete('/courses/:id', (req, res) => {
+    const reqID = +req.params.id;
+    db.courses = db.courses.filter(c => c.id !== reqID);
+    res.sendStatus(204);
+});
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
