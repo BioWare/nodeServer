@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 
-const app = express()
+export const app = express()
 const port = 3000
 const jsonMiddleWare = express.json()
 app.use(jsonMiddleWare)
@@ -13,8 +13,16 @@ type CourseType = {
 type dateBase = {
   courses: Array<CourseType>
 }
+type statusesType = {
+  OK_200: number
+  CREATED_201: number
+  NO_CONTENT_204: number
 
-const HTTP_STATUSES = {
+  BAD_REQUEST_400: number
+  NOT_FOUND_404: number
+}
+
+export const HTTP_STATUSES: statusesType = {
   OK_200: 200,
   CREATED_201: 201,
   NO_CONTENT_204: 204,
@@ -98,9 +106,13 @@ app.put('/courses/:id', (req: Request, res: Response) => {
   }
   foundCours.title = req.body.title
   
-  res.json(foundCours)
+  res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
+app.delete('/__test__/data', (req, res) => {
+  db.courses = [];
+  res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
