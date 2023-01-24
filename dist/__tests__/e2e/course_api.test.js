@@ -33,5 +33,16 @@ describe('/courses', () => {
             .post('/courses')
             .send({ title: '' })
             .expect(src_1.HTTP_STATUSES.BAD_REQUEST_400);
+        yield (0, supertest_1.default)(src_1.app)
+            .get('/courses')
+            .expect(src_1.HTTP_STATUSES.OK_200, []);
+    }));
+    it('shoud create course with given data', () => __awaiter(void 0, void 0, void 0, function* () {
+        const createResponse = yield (0, supertest_1.default)(src_1.app)
+            .post('/courses')
+            .send({ title: 'test_Data_science' })
+            .expect(src_1.HTTP_STATUSES.CREATED_201);
+        console.log(createResponse);
+        //TODO get created element
     }));
 });

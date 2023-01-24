@@ -57,7 +57,7 @@ exports.app.post('/courses', (req, res) => {
         title: req.body.title
     };
     db.courses.push(addedCourse);
-    res.status(exports.HTTP_STATUSES.CREATED_201).json('course ' + addedCourse.title + ' added');
+    res.status(exports.HTTP_STATUSES.CREATED_201).json(addedCourse.title);
 });
 exports.app.delete('/courses/:id', (req, res) => {
     const reqID = +req.params.id;

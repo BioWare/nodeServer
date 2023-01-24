@@ -1,3 +1,5 @@
+import { log } from 'console'
+import { title } from 'process'
 import request from 'supertest'
 import { app, HTTP_STATUSES } from '../../src'
 
@@ -25,6 +27,22 @@ describe('/courses', () => {
       .post('/courses')
       .send({ title: '' })
       .expect(HTTP_STATUSES.BAD_REQUEST_400)
+
+
+    await request(app)
+      .get('/courses')
+      .expect(HTTP_STATUSES.OK_200, [])
+  })
+
+  it('shoud create course with given data', async () => {
+    const createResponse = await request(app)
+      .post('/courses')
+      .send({ title: 'test_Data_science' })
+      .expect(HTTP_STATUSES.CREATED_201)
+    console.log(createResponse);
+    
+    //TODO get created element
+
   })
 
 })

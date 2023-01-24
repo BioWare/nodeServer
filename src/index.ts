@@ -63,7 +63,7 @@ app.get('/courses/:id', (req: Request, res: Response) => {
   if(!foundCours) {
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
   }
-  
+
   res.json(foundCours)
 })
 
@@ -80,7 +80,7 @@ app.post('/courses', (req: Request, res: Response) => {
   }
   db.courses.push(addedCourse)
   
-  res.status(HTTP_STATUSES.CREATED_201).json('course ' + addedCourse.title + ' added')
+  res.status(HTTP_STATUSES.CREATED_201).json(addedCourse.title)
 })
 
 app.delete('/courses/:id', (req: Request, res: Response) => {
