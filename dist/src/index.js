@@ -18,27 +18,24 @@ exports.HTTP_STATUSES = {
 };
 const db = {
     courses: [
-        { id: 1, title: 'front-end' },
-        { id: 2, title: 'back-end' },
-        { id: 3, title: 'devOps' },
-        { id: 4, title: 'QA' }
+        { id: 1, title: 'front-end', studentsCount: 10 },
+        { id: 2, title: 'back-end', studentsCount: 10 },
+        { id: 3, title: 'devOps', studentsCount: 10 },
+        { id: 4, title: 'QA', studentsCount: 10 }
     ]
 };
-exports.app.get('/', (req, res) => {
-    const a = 4;
-    if (a > 5) {
-        res.send('OK!');
-    }
-    else {
-        res.send('Hello World!');
-    }
-});
+const getViewModule = (course) => {
+    return {
+        id: course.id,
+        title: course.title
+    };
+};
 exports.app.get('/courses', (req, res) => {
     let foundCourses = db.courses;
     if (req.query.title) {
         foundCourses = foundCourses.filter(c => c.title.indexOf(req.query.title) > -1);
     }
-    res.json(foundCourses);
+    res.json(foundCourses.map(getViewModule));
 });
 exports.app.get('/courses/:id', (req, res) => {
     const foundCours = db.courses.find(course => course.id === +req.params.id);
@@ -54,10 +51,12 @@ exports.app.post('/courses', (req, res) => {
     }
     const addedCourse = {
         id: +(new Date()),
-        title: req.body.title
+        title: req.body.title,
+        studentsCount: 0
     };
     db.courses.push(addedCourse);
-    res.status(exports.HTTP_STATUSES.CREATED_201).json(addedCourse.title);
+    res.status(exports.HTTP_STATUSES.CREATED_201)
+        .json(getViewModule(addedCourse));
 });
 exports.app.delete('/courses/:id', (req, res) => {
     const reqID = +req.params.id;
