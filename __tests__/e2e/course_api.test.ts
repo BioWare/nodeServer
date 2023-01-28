@@ -1,11 +1,9 @@
-import { log } from 'console'
-import { title } from 'process'
 import request from 'supertest'
 import { app, HTTP_STATUSES } from '../../src'
 
 describe('/courses', () => {
 
-  beforeAll( async () => {
+  beforeAll(async () => {
     await request(app).delete('/__test__/data')
   })
 
@@ -39,10 +37,6 @@ describe('/courses', () => {
       .post('/courses')
       .send({ title: 'test_Data_science' })
       .expect(HTTP_STATUSES.CREATED_201)
-    console.log(createResponse);
-    
-    //TODO get created element
-
   })
 
 })

@@ -42,7 +42,5 @@ describe('/courses', () => {
             .post('/courses')
             .send({ title: 'test_Data_science' })
             .expect(src_1.HTTP_STATUSES.CREATED_201);
-        console.log(createResponse);
-        //TODO get created element
     }));
 });
